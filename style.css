@@ -179,3 +179,6 @@ footer{
         width:220px;
     }
 }
+.gallery a{
+    display:block;
+}
