@@ -257,5 +257,34 @@ Handcrafted Resin Gifts & Customized Creations
 </p>
 </footer>
 
+<script>
+function sendWhatsApp() {
+
+    let name = document.getElementById("name").value;
+    let phone = document.getElementById("phone").value;
+    let product = document.getElementById("product").value;
+    let message = document.getElementById("message").value;
+
+    if(name === "" || phone === "" || product === ""){
+        alert("Please fill all required fields.");
+        return;
+    }
+
+    let text =
+`Hello Resinart by Ramaveni
+
+Name: ${name}
+Phone: ${phone}
+Product: ${product}
+Message: ${message}`;
+
+    let whatsappURL =
+    "https://wa.me/918341886187?text=" +
+    encodeURIComponent(text);
+
+    window.open(whatsappURL, "_blank");
+}
+</script>
+
 </body>
 </html>
