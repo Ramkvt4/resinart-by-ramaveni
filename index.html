@@ -22,78 +22,105 @@ content="Handcrafted Resin Gifts, Name Keychains, Photo Frames, Wedding Keepsake
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 
 import {
-getFirestore,
-collection,
-addDoc,
-serverTimestamp
+    getFirestore,
+    collection,
+    addDoc,
+    getDocs,
+    query,
+    where,
+    serverTimestamp
 }
 from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 const firebaseConfig = {
-
-apiKey: "AIzaSyBi-OeIqwMWbY6i_iPwovWJwIy0n175jJU",
-
-authDomain: "resinart-by--ramaveni.firebaseapp.com",
-
-projectId: "resinart-by--ramaveni",
-
-storageBucket: "resinart-by--ramaveni.firebasestorage.app",
-
-messagingSenderId: "462502409215",
-
-appId: "1:462502409215:web:db11e1d2ec3a37ed93adca"
-
+    apiKey: "AIzaSyBi-OeIqwMWbY6i_iPwovWJwIy0n175jJU",
+    authDomain: "resinart-by--ramaveni.firebaseapp.com",
+    projectId: "resinart-by--ramaveni",
+    storageBucket: "resinart-by--ramaveni.firebasestorage.app",
+    messagingSenderId: "462502409215",
+    appId: "1:462502409215:web:db11e1d2ec3a37ed93adca"
 };
 
 const app = initializeApp(firebaseConfig);
-
 const db = getFirestore(app);
+
+async function loadReviews() {
+
+    const reviewsDiv = document.getElementById("reviewsContainer");
+
+    if (!reviewsDiv) return;
+
+    reviewsDiv.innerHTML = "";
+
+    const q = query(
+        collection(db, "reviews"),
+        where("status", "==", "approved")
+    );
+
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach((doc) => {
+
+        const data = doc.data();
+
+        let stars = "⭐".repeat(Number(data.rating));
+
+        reviewsDiv.innerHTML += `
+        <div class="review-card">
+            <div>${stars}</div>
+            <p>"${data.review}"</p>
+            <h4>- ${data.name}</h4>
+        </div>
+        `;
+    });
+}
 
 window.submitReview = async function() {
 
-let name =
-document.getElementById("reviewName").value;
+    let name =
+    document.getElementById("reviewName").value;
 
-let rating =
-document.getElementById("rating").value;
+    let rating =
+    document.getElementById("rating").value;
 
-let review =
-document.getElementById("reviewText").value;
+    let review =
+    document.getElementById("reviewText").value;
 
-if(name==="" || review===""){
+    if(name === "" || review === ""){
+        alert("Please fill all fields");
+        return;
+    }
 
-alert("Please fill all fields");
+    try{
 
-return;
+        await addDoc(
+            collection(db,"reviews"),
+            {
+                name:name,
+                rating:rating,
+                review:review,
+                status:"pending",
+                createdAt:serverTimestamp()
+            }
+        );
+
+        alert("Review submitted successfully! Waiting for approval.");
+
+        document.getElementById("reviewName").value="";
+        document.getElementById("reviewText").value="";
+
+        loadReviews();
+
+    }
+    catch(error){
+
+        alert("Error : " + error.message);
+
+    }
 
 }
 
-try{
-
-await addDoc(
-collection(db,"reviews"),
-{
-name:name,
-rating:rating,
-review:review,
-status:"pending",
-createdAt:serverTimestamp()
-}
-);
-
-alert("Review submitted successfully!");
-
-document.getElementById("reviewName").value="";
-document.getElementById("reviewText").value="";
-
-}
-catch(error){
-
-alert("Error : "+error.message);
-
-}
-
-}
+window.addEventListener("load", loadReviews);
 
 </script>
 
