@@ -212,32 +212,27 @@ Open in Google Maps
 
 <h2>Order Enquiry</h2>
 
-<form class="order-form">
+<section id="order">
 
-<input type="text"
-placeholder="Your Name"
-required>
+<h2>Order Enquiry</h2>
 
-<input type="tel"
-placeholder="Phone Number"
-required>
+<div class="order-form">
 
-<input type="text"
-placeholder="Product Required"
-required>
+<input type="text" id="name" placeholder="Your Name" required>
 
-<textarea
-placeholder="Describe Your Requirement"
-rows="5">
-</textarea>
+<input type="tel" id="phone" placeholder="Phone Number" required>
 
-<a class="btn"
-href="https://wa.me/918341886187"
-target="_blank">
-Send WhatsApp Enquiry
-</a>
+<input type="text" id="product" placeholder="Product Required" required>
 
-</form>
+<textarea id="message" placeholder="Describe Your Requirement" rows="5"></textarea>
+
+<button class="btn" onclick="sendWhatsApp()">
+Send on WhatsApp
+</button>
+
+</div>
+
+</section>
 
 </section>
 
