@@ -17,6 +17,86 @@ content="Handcrafted Resin Gifts, Name Keychains, Photo Frames, Wedding Keepsake
 
 </head>
 
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+addDoc,
+serverTimestamp
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey: "AIzaSyBi-OeIqwMWbY6i_iPwovWJwIy0n175jJU",
+
+authDomain: "resinart-by--ramaveni.firebaseapp.com",
+
+projectId: "resinart-by--ramaveni",
+
+storageBucket: "resinart-by--ramaveni.firebasestorage.app",
+
+messagingSenderId: "462502409215",
+
+appId: "1:462502409215:web:db11e1d2ec3a37ed93adca"
+
+};
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+window.submitReview = async function() {
+
+let name =
+document.getElementById("reviewName").value;
+
+let rating =
+document.getElementById("rating").value;
+
+let review =
+document.getElementById("reviewText").value;
+
+if(name==="" || review===""){
+
+alert("Please fill all fields");
+
+return;
+
+}
+
+try{
+
+await addDoc(
+collection(db,"reviews"),
+{
+name:name,
+rating:rating,
+review:review,
+status:"pending",
+createdAt:serverTimestamp()
+}
+);
+
+alert("Review submitted successfully!");
+
+document.getElementById("reviewName").value="";
+document.getElementById("reviewText").value="";
+
+}
+catch(error){
+
+alert("Error : "+error.message);
+
+}
+
+}
+
+</script>
+
 <body>
 
 <!-- WhatsApp Floating Button -->
